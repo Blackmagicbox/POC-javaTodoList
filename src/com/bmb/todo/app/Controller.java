@@ -26,7 +26,7 @@ public class Controller {
         TodoItem item3 = new TodoItem("Working meeting",
                 "Meeting to discuss the begining of the sprint", LocalDate.of(2020, Month.JULY, 24));
 
-        todoitems = new ArrayList<TodoItem>();
+        todoitems = new ArrayList<>();
         todoitems.add(item1);
         todoitems.add(item2);
         todoitems.add(item3);
