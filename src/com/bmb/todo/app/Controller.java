@@ -2,12 +2,14 @@ package com.bmb.todo.app;
 
 import com.bmb.todo.app.datamodel.TodoItem;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,8 @@ public class Controller {
     private ListView<TodoItem> todoListView;
     @FXML
     private TextArea todoListItemDetailsView;
+    @FXML
+    private Label deadlineLabel;
 
     public void initialize() {
         TodoItem item1 = new TodoItem("Mail birthday card",
@@ -34,24 +38,21 @@ public class Controller {
         todoitems.add(item2);
         todoitems.add(item3);
 
+        todoListView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue != null) {
+                TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+                updateTodoItemText(item);
+            }
+        });
+
         todoListView.getItems().setAll(todoitems);
         todoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        todoListView.getSelectionModel().selectFirst();
     }
 
     @FXML
-    public void handleClickListView(){
-        TodoItem item = todoListView.getSelectionModel().getSelectedItem();
-        System.out.println(item.getDetails());
-        todoListItemDetailsView.setText(buildDescriptionString(item));
-    };
-
-    private String buildDescriptionString(TodoItem i) {
-        StringBuilder sb = new StringBuilder(i.getShortDescription());
-        sb.append("\n\n");
-        sb.append(i.getDetails());
-        sb.append("\n\n");
-        sb.append("Due: ");
-        sb.append(i.getDeadLine().toString());
-        return sb.toString();
+    public void updateTodoItemText(TodoItem item){
+        todoListItemDetailsView.setText(item.getDetails());
+        deadlineLabel.setText(item.getDeadLine().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
     };
 }
