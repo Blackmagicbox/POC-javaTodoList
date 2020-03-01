@@ -8,7 +8,6 @@ import javafx.scene.control.TextArea;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,16 @@ public class Controller {
     public void handleClickListView(){
         TodoItem item = todoListView.getSelectionModel().getSelectedItem();
         System.out.println(item.getDetails());
-        todoListItemDetailsView.setText(item.getDetails() + ' ' + item.getDeadLine()
-                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        todoListItemDetailsView.setText(buildDescriptionString(item));
+    };
+
+    private String buildDescriptionString(TodoItem i) {
+        StringBuilder sb = new StringBuilder(i.getShortDescription());
+        sb.append("\n\n");
+        sb.append(i.getDetails());
+        sb.append("\n\n");
+        sb.append("Due: ");
+        sb.append(i.getDeadLine().toString());
+        return sb.toString();
     };
 }
