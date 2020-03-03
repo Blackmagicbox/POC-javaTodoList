@@ -27,6 +27,9 @@ public class Controller {
   @FXML
   private BorderPane mainBorderPane;
 
+  /**
+   * Initialize method.
+   */
   public void initialize() {
     todoListView.getSelectionModel().selectedItemProperty()
         .addListener((observableValue, oldValue, newValue) -> {
@@ -59,6 +62,7 @@ public class Controller {
     if (result.isPresent() && result.get() == ButtonType.OK) {
       DialogController controller = fxmlLoader.getController();
       controller.processResults();
+      todoListView.getItems().setAll(TodoData.getInstance().getTodoItems());
       System.out.println("Ok button pressed");
     } else {
       System.out.println("Cancel pressed");
