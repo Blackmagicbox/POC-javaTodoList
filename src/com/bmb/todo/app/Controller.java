@@ -2,16 +2,21 @@ package com.bmb.todo.app;
 
 import com.bmb.todo.app.datamodel.TodoData;
 import com.bmb.todo.app.datamodel.TodoItem;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 
 public class Controller {
+
   @FXML
   private ListView<TodoItem> todoListView;
   @FXML
@@ -23,19 +28,20 @@ public class Controller {
   private BorderPane mainBorderPane;
 
   public void initialize() {
-    todoListView.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-      if (newValue != null) {
-        TodoItem item = todoListView.getSelectionModel().getSelectedItem();
-        updateTodoItemText(item);
-      }
-    });
+    todoListView.getSelectionModel().selectedItemProperty()
+        .addListener((observableValue, oldValue, newValue) -> {
+          if (newValue != null) {
+            TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+            updateTodoItemText(item);
+          }
+        });
     todoListView.getItems().setAll(TodoData.getInstance().getTodoItems());
     todoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     todoListView.getSelectionModel().selectFirst();
   }
 
   @FXML
-  public void showNewItemDialog () {
+  public void showNewItemDialog() {
     Dialog<ButtonType> dialog = new Dialog<>();
     dialog.initOwner(mainBorderPane.getScene().getWindow());
     FXMLLoader fxmlLoader = new FXMLLoader();

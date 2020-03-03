@@ -11,37 +11,37 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <BorderPane fx:id="mainBorderPane" fx:controller="com.bmb.todo.app.Controller"
-            xmlns:fx="http://javafx.com/fxml">
-    <top>
-        <MenuBar>
-            <Menu text="File">
-                <items>
-                    <MenuItem text="New..." onAction="#showNewItemDialog"/>
-                    <SeparatorMenuItem/>
-                    <MenuItem text="Save..."/>
-                    <MenuItem text="Exit"/>
-                </items>
-            </Menu>
-        </MenuBar>
-    </top>
-    <left>
-        <ListView fx:id="todoListView"/>
-    </left>
-    <center>
-        <VBox style="-fx-background-color: white">
-            <TextArea fx:id="todoListItemDetailsView" VBox.vgrow="ALWAYS"/>
-            <HBox fx:id="container">
-                <Label text="Due: " style="-fx-background-color: white">
-                    <font>
-                        <Font size="20"/>
-                    </font>
-                </Label>
-                <Label fx:id="deadlineLabel" style="-fx-background-color: white">
-                    <font>
-                        <Font size="20" />
-                    </font>
-                </Label>
-            </HBox>
-        </VBox>
-    </center>
+  xmlns:fx="http://javafx.com/fxml">
+  <top>
+    <MenuBar>
+      <Menu text="File">
+        <items>
+          <MenuItem text="New..." onAction="#showNewItemDialog"/>
+          <SeparatorMenuItem/>
+          <MenuItem text="Save..."/>
+          <MenuItem text="Exit"/>
+        </items>
+      </Menu>
+    </MenuBar>
+  </top>
+  <left>
+    <ListView fx:id="todoListView"/>
+  </left>
+  <center>
+    <VBox style="-fx-background-color: white">
+      <TextArea fx:id="todoListItemDetailsView" VBox.vgrow="ALWAYS"/>
+      <HBox fx:id="container">
+        <Label text="Due: " style="-fx-background-color: white">
+          <font>
+            <Font size="20"/>
+          </font>
+        </Label>
+        <Label fx:id="deadlineLabel" style="-fx-background-color: white">
+          <font>
+            <Font size="20" />
+          </font>
+        </Label>
+      </HBox>
+    </VBox>
+  </center>
 </BorderPane>

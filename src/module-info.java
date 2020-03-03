@@ -1,6 +1,6 @@
 module POC.javaTodoList {
-    requires javafx.fxml;
-    requires javafx.controls;
+  requires javafx.fxml;
+  requires javafx.controls;
 
-    opens com.bmb.todo.app;
+  opens com.bmb.todo.app;
 }
