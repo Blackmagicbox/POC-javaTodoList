@@ -18,15 +18,17 @@ public class DialogController {
   private DatePicker deadlinePicker;
 
   @FXML
-  public void processResults () {
+  public TodoItem processResults () throws Exception {
     String shortDescription = shortDescriptionField.getText().trim();
     String details = detailsArea.getText().trim();
     LocalDate deadline = deadlinePicker.getValue();
 
     if (!shortDescription.isEmpty() && !details.isEmpty() && deadline != null) {
-      TodoData.getInstance().addTodoItem(new TodoItem(shortDescription, details, deadline));
+      TodoItem todoItem =  new TodoItem(shortDescription, details, deadline);
+      TodoData.getInstance().addTodoItem(todoItem);
+      return todoItem;
     } else {
-      return;
+      throw new Exception("You need to feel every field to add a new Item");
     }
   };
 
