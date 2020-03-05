@@ -17,28 +17,11 @@ public class TodoItem {
     return shortDescription;
   }
 
-  public void setShortDescription(String shortDescription) {
-    this.shortDescription = shortDescription;
-  }
-
   public String getDetails() {
     return details;
   }
 
-  public void setDetails(String details) {
-    this.details = details;
-  }
-
   public LocalDate getDeadLine() {
     return deadLine;
-  }
-
-  public void setDeadLine(LocalDate deadLine) {
-    this.deadLine = deadLine;
-  }
-
-  @Override
-  public String toString() {
-    return shortDescription;
   }
 }
