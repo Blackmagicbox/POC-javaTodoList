@@ -56,7 +56,7 @@ public class Controller {
               setText(null);
             } else {
               setText(item.getShortDescription());
-              if (item.getDeadLine().equals(LocalDate.now()) || item.getDeadLine().isBefore(LocalDate.now())) {
+              if (item.getDeadLine().isBefore(LocalDate.now().plusDays(1))) {
                 setTextFill(Color.RED);
               } else if (item.getDeadLine().equals(LocalDate.now().plusDays(1))) {
                 setTextFill(Color.ORANGE);
