@@ -48,13 +48,14 @@ public class Controller {
   private ToggleButton filterToggleBtn;
 
   private FilteredList<TodoItem> filteredList;
+  private Predicate<TodoItem> showTodaysItems;
+  private Predicate<TodoItem> showAllItems;
 
   /**
    * Initialize method.
    */
   public void initialize() {
     listContextMenu = new ContextMenu();
-    filterToggleBtn = new ToggleButton();
     MenuItem deleteMenuItem = new MenuItem("Delete");
     deleteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
       @Override
@@ -71,11 +72,25 @@ public class Controller {
             updateTodoItemText(item);
           }
         });
+    showTodaysItems = new Predicate<>() {
+      @Override
+      public boolean test(TodoItem todoItem) {
+        return (todoItem.getDeadLine().isEqual(LocalDate.now()));
+      }
+    };
+
+    showAllItems = new Predicate<>() {
+      @Override
+      public boolean test(TodoItem item) {
+        return true;
+      }
+    };
+
     filteredList = new FilteredList<>(TodoData.getInstance().getTodoItems(),
         new Predicate<TodoItem>() {
           @Override
           public boolean test(TodoItem item) {
-            return false;
+            return true;
           }
         });
     SortedList<TodoItem> sortedList = new SortedList<>(filteredList,
@@ -174,10 +189,24 @@ public class Controller {
 
   @FXML
   public void handleFilterButton () {
+    TodoItem selectedItem = todoListView.getSelectionModel().getSelectedItem();
     if (filterToggleBtn.isSelected()) {
-
+      filteredList.setPredicate(showTodaysItems);
+      if (filteredList.isEmpty()) {
+        todoListItemDetailsView.clear();
+        deadlineLabel.setText("");
+      } else if (filteredList.contains(selectedItem)) {
+        todoListView.getSelectionModel().select(selectedItem);
+      } else {
+        todoListView.getSelectionModel().selectFirst();
+      }
     } else {
-
+      filteredList.setPredicate(showAllItems);
+      if (filteredList.contains(selectedItem)) {
+        todoListView.getSelectionModel().select(selectedItem);
+      } else {
+        todoListView.getSelectionModel().selectFirst();
+      }
     }
   };
 }
