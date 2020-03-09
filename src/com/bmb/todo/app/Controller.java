@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Predicate;
+import javafx.application.Platform;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
@@ -209,4 +210,9 @@ public class Controller {
       }
     }
   };
+
+  @FXML
+  public void handleExit() {
+    Platform.exit();
+  }
 }
