@@ -37,6 +37,7 @@ public class Main extends Application {
       System.out.println(e.getMessage());
     }
   }
+
   public static void main(String[] args) {
     launch(args);
   }

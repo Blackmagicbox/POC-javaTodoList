@@ -1,18 +1,17 @@
 package com.bmb.todo.app;
 
+import static java.util.Comparator.comparing;
+
 import com.bmb.todo.app.datamodel.TodoData;
 import com.bmb.todo.app.datamodel.TodoItem;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Predicate;
 import javafx.application.Platform;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -34,7 +33,6 @@ import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 public class Controller {
-
   @FXML
   private ListView<TodoItem> todoListView;
   @FXML
@@ -58,12 +56,9 @@ public class Controller {
   public void initialize() {
     listContextMenu = new ContextMenu();
     MenuItem deleteMenuItem = new MenuItem("Delete");
-    deleteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent actionEvent) {
-        TodoItem item = todoListView.getSelectionModel().getSelectedItem();
-        deleteItem(item);
-      }
+    deleteMenuItem.setOnAction(actionEvent -> {
+      TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+      deleteItem(item);
     });
     listContextMenu.getItems().addAll(deleteMenuItem);
     todoListView.getSelectionModel().selectedItemProperty()
@@ -73,34 +68,13 @@ public class Controller {
             updateTodoItemText(item);
           }
         });
-    showTodaysItems = new Predicate<>() {
-      @Override
-      public boolean test(TodoItem todoItem) {
-        return (todoItem.getDeadLine().isEqual(LocalDate.now()));
-      }
-    };
+    showTodaysItems = todoItem -> (todoItem.getDeadLine().isEqual(LocalDate.now()));
 
-    showAllItems = new Predicate<>() {
-      @Override
-      public boolean test(TodoItem item) {
-        return true;
-      }
-    };
+    showAllItems = item -> true;
 
     filteredList = new FilteredList<>(TodoData.getInstance().getTodoItems(),
-        new Predicate<TodoItem>() {
-          @Override
-          public boolean test(TodoItem item) {
-            return true;
-          }
-        });
-    SortedList<TodoItem> sortedList = new SortedList<>(filteredList,
-        new Comparator<TodoItem>() {
-          @Override
-          public int compare(TodoItem o1, TodoItem o2) {
-            return o1.getDeadLine().compareTo(o2.getDeadLine());
-          }
-        });
+        item -> true);
+    SortedList<TodoItem> sortedList = new SortedList<>(filteredList, comparing(TodoItem::getDeadLine));
     todoListView.setItems(sortedList);
     todoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     todoListView.getSelectionModel().selectFirst();
@@ -182,14 +156,15 @@ public class Controller {
   @FXML
   public void handleKeyPress(KeyEvent keyEvent) {
     TodoItem selectedItem = todoListView.getSelectionModel().getSelectedItem();
-    Boolean canDelete = keyEvent.getCode().equals(KeyCode.DELETE) || keyEvent.getCode().equals(KeyCode.BACK_SPACE);
+    Boolean canDelete =
+        keyEvent.getCode().equals(KeyCode.DELETE) || keyEvent.getCode().equals(KeyCode.BACK_SPACE);
     if (selectedItem != null && canDelete) {
       deleteItem(selectedItem);
     }
   }
 
   @FXML
-  public void handleFilterButton () {
+  public void handleFilterButton() {
     TodoItem selectedItem = todoListView.getSelectionModel().getSelectedItem();
     if (filterToggleBtn.isSelected()) {
       filteredList.setPredicate(showTodaysItems);
@@ -209,7 +184,7 @@ public class Controller {
         todoListView.getSelectionModel().selectFirst();
       }
     }
-  };
+  }
 
   @FXML
   public void handleExit() {
