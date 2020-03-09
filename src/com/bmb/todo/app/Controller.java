@@ -5,7 +5,11 @@ import com.bmb.todo.app.datamodel.TodoItem;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.Optional;
+import java.util.function.Predicate;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,6 +25,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
@@ -37,13 +44,17 @@ public class Controller {
   private BorderPane mainBorderPane;
   @FXML
   private ContextMenu listContextMenu;
+  @FXML
+  private ToggleButton filterToggleBtn;
 
+  private FilteredList<TodoItem> filteredList;
 
   /**
    * Initialize method.
    */
   public void initialize() {
     listContextMenu = new ContextMenu();
+    filterToggleBtn = new ToggleButton();
     MenuItem deleteMenuItem = new MenuItem("Delete");
     deleteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
       @Override
@@ -60,7 +71,21 @@ public class Controller {
             updateTodoItemText(item);
           }
         });
-    todoListView.setItems(TodoData.getInstance().getTodoItems());
+    filteredList = new FilteredList<>(TodoData.getInstance().getTodoItems(),
+        new Predicate<TodoItem>() {
+          @Override
+          public boolean test(TodoItem item) {
+            return false;
+          }
+        });
+    SortedList<TodoItem> sortedList = new SortedList<>(filteredList,
+        new Comparator<TodoItem>() {
+          @Override
+          public int compare(TodoItem o1, TodoItem o2) {
+            return o1.getDeadLine().compareTo(o2.getDeadLine());
+          }
+        });
+    todoListView.setItems(sortedList);
     todoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     todoListView.getSelectionModel().selectFirst();
     todoListView.setCellFactory(new Callback<>() {
@@ -82,6 +107,13 @@ public class Controller {
             }
           }
         };
+        cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+          if (isNowEmpty) {
+            cell.setContextMenu(null);
+          } else {
+            cell.setContextMenu(listContextMenu);
+          }
+        });
         return cell;
       }
     });
@@ -129,6 +161,23 @@ public class Controller {
     if (result.isPresent() && (result.get() == ButtonType.OK)) {
       TodoData.getInstance().deleteTodoItem(item);
     }
-    System.out.println(item);
   }
+
+  @FXML
+  public void handleKeyPress(KeyEvent keyEvent) {
+    TodoItem selectedItem = todoListView.getSelectionModel().getSelectedItem();
+    Boolean canDelete = keyEvent.getCode().equals(KeyCode.DELETE) || keyEvent.getCode().equals(KeyCode.BACK_SPACE);
+    if (selectedItem != null && canDelete) {
+      deleteItem(selectedItem);
+    }
+  }
+
+  @FXML
+  public void handleFilterButton () {
+    if (filterToggleBtn.isSelected()) {
+
+    } else {
+
+    }
+  };
 }

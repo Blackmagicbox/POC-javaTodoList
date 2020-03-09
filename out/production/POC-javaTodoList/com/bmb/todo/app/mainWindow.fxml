@@ -10,22 +10,33 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToggleButton?>
 <BorderPane fx:id="mainBorderPane" fx:controller="com.bmb.todo.app.Controller"
   xmlns:fx="http://javafx.com/fxml">
   <top>
-    <MenuBar>
-      <Menu text="File">
-        <items>
-          <MenuItem text="New..." onAction="#showNewItemDialog"/>
-          <SeparatorMenuItem/>
-          <MenuItem text="Save..."/>
-          <MenuItem text="Exit"/>
-        </items>
-      </Menu>
-    </MenuBar>
+    <VBox>
+      <MenuBar>
+        <Menu text="File">
+          <items>
+            <MenuItem text="New..." onAction="#showNewItemDialog"/>
+            <SeparatorMenuItem/>
+            <MenuItem text="Save..."/>
+            <MenuItem text="Exit"/>
+          </items>
+        </Menu>
+      </MenuBar>
+      <ToolBar>
+        <HBox>
+          <Button text="New..." onAction="#showNewItemDialog"/>
+          <ToggleButton text="Today's Items" fx:id="filterToggleBtn" onAction="#handleFilterButton" />
+        </HBox>
+      </ToolBar>
+    </VBox>
   </top>
   <left>
-    <ListView fx:id="todoListView"/>
+    <ListView fx:id="todoListView" onKeyReleased="#handleKeyPress"/>
   </left>
   <center>
     <VBox style="-fx-background-color: white">

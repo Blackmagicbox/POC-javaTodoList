@@ -83,6 +83,6 @@ public class TodoData {
   }
 
   public void deleteTodoItem(TodoItem item) {
-    System.out.println(item);
+    todoItems.remove(item);
   }
 }
