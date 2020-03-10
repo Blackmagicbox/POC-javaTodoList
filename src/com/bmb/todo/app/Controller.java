@@ -190,4 +190,9 @@ public class Controller {
   public void handleExit() {
     Platform.exit();
   }
+
+  @FXML
+  public void editItem() {
+    System.out.println("TBI");
+  }
 }
